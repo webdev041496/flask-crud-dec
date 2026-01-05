@@ -51,6 +51,14 @@ def delete_task(task_id):
     db.session.commit()                             # Commit the session to save changes to the database
     return redirect("/")                             # Redirect back to the home page
 
+@app.route("/edit/<int:task_id>", methods=["GET", "POST"])
+def edit_task(task_id):
+    task = Task.query.get(task_id)
+    if request.method == "POST":
+        task.title = request.form.get("task")
+        db.session.commit()
+        return redirect("/")
+    return render_template("edit.html", task=task)
 
 if __name__ == "__main__": # "main" is the namespace
     app.run(debug=True)    # this namespace in addition to the run() method are both necessary for the app to run properly
